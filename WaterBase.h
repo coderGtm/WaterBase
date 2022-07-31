@@ -38,6 +38,11 @@ void WaterBase::write(string valType, string name, string val) {
     string line;
     vector<string> lines;
     bool wrote = false;
+    
+    //create file if not exists
+    ofstream temp(fname,ios::out | ios::app);
+    temp.close();
+    
     ifstream dbFile(fname);
     if (dbFile.is_open()) {
         while (getline(dbFile,line)) {
