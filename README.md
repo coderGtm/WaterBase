@@ -26,7 +26,7 @@ You can then easily use WaterBase `db` object to save and load your persistent d
 
 For saving data, use **Save* (var_name, value);**
 ```
-db.SaveText ( "pushpa dialogue", "jhukega nai sala" );
+db.SaveText ( "a quote", "Talk is cheap. Show me the code." );
 db.SaveBoolean ( "cpp is awesome", true );
 db.SaveNumber ( "num_var", 345 );
 ```
@@ -36,7 +36,7 @@ To load saved data, use **Load* (var_name, default value)** <-- _default value i
 ```
 cout << db.LoadBoolean ( "cpp is awesome", false ) << endl;
 cout << db.LoadNumber ( "num_var 2", 9 ) << endl;
-cout << db.LoadText( "pushpa dialogue", "hi" ) << endl;
+cout << db.LoadText( "a quote", "Quote not found" ) << endl;
 ```
 
 Refer to [driver.cpp](driver.cpp) for the whole programme.
