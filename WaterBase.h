@@ -24,11 +24,10 @@ class WaterBase {
     void write(string,string,string);
     string read(string,string,string);
     public:
-    WaterBase() {
+    WaterBase(string db_name) {
         seperator = ":";
-        fname = "db.txt";
+        fname = db_name+".wb";
     }
-    void SetSeperator(string);
     void SetFile(string);
     vector<string> tokenize(string,string);
     void SaveBoolean(string,bool);
@@ -37,14 +36,13 @@ class WaterBase {
     bool LoadBoolean(string,bool);
     long long int LoadNumber(string,long long int);
     string LoadText(string,string);
-    string base64_encode(const string&);
-    string base64_decode(const string&);
 };
 void WaterBase::write(string valType, string name, string val) {
     string line;
     vector<string> lines;
     bool wrote = false;
 
+    //create file if not exist
     ofstream temp(fname,ios::out | ios::app);
     temp.close();
 
@@ -53,13 +51,22 @@ void WaterBase::write(string valType, string name, string val) {
         while (getline(dbFile,line)) {
             lines.push_back(line);
             vector<string> tokens = tokenize(line,seperator);
-            if (tokens[0] == valType && base64_decode(tokens[1]) == name) {
-                lines.back() = valType+seperator+base64_encode(name)+seperator+base64_encode(val);
-                wrote = true;
+            //check type match
+            if (tokens[0] == valType) {
+                int keyLen = stoi(tokens[1]);
+                int valLen = stoi(tokens[2]);
+                string dataString = line.substr(1+tokens[1].length()+tokens[2].length()+3);
+                string key = dataString.substr(0,keyLen);
+                //check key match
+                if (key == name) {
+                    //overwrite previous value
+                    lines.back() = valType+seperator+to_string(name.length())+seperator+to_string(val.length())+seperator+name+seperator+val;
+                    wrote = true;
+                }
             }
         }
         if (!wrote) {
-            lines.push_back(valType+seperator+base64_encode(name)+seperator+base64_encode(val));
+            lines.push_back(valType+seperator+to_string(name.length())+seperator+to_string(val.length())+seperator+name+seperator+val);
             wrote = true;
         }
         dbFile.close();
@@ -74,22 +81,27 @@ void WaterBase::write(string valType, string name, string val) {
 }
 string WaterBase::read(string valType, string name, string defaultVal) {
     string line;
+    string val = defaultVal;
     ifstream dbFile(fname);
     if (dbFile.is_open()) {
         while (getline(dbFile,line)) {
             vector<string> tokens = tokenize(line,seperator);
-            if (tokens[0] == valType && base64_decode(tokens[1]) == name) {
-                dbFile.close();
-                return base64_decode(tokens[2]);
+            //check type match
+            if (tokens[0] == valType) {
+                int keyLen = stoi(tokens[1]);
+                int valLen = stoi(tokens[2]);
+                string dataString = line.substr(1+tokens[1].length()+tokens[2].length()+3);
+                string key = dataString.substr(0,keyLen);
+                //check key match
+                if (key == name) {
+                    //extract value
+                    val = dataString.substr(keyLen+1);
+                }
             }
         }
         dbFile.close();
-        return defaultVal;
     }
-    return defaultVal;
-}
-void WaterBase::SetSeperator(string sep) {
-    seperator = sep;
+    return val;
 }
 void WaterBase::SetFile(string name) {
     fname = name;
@@ -127,43 +139,4 @@ long long int WaterBase::LoadNumber(string name, long long int defaultVal) {
 string WaterBase::LoadText(string name, string defaultVal) {
     string entry = read("S",name,defaultVal);
     return entry;
-}
-string WaterBase::base64_encode(const string &in) {
-
-    string out;
-
-    int val=0, valb=-6;
-    for (int jj = 0; jj < in.size(); jj++) {
-    	char c = in[jj];
-        val = (val<<8) + c;
-        valb += 8;
-        while (valb>=0) {
-            out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(val>>valb)&0x3F]);
-            valb-=6;
-        }
-    }
-    if (valb>-6) out.push_back("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[((val<<8)>>(valb+8))&0x3F]);
-    while (out.size()%4) out.push_back('=');
-    return out;
-}
-
-string WaterBase::base64_decode(const string &in) {
-
-    string out;
-
-    vector<int> T(256,-1);
-    for (int i=0; i<64; i++) T["ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[i]] = i; 
-
-    int val=0, valb=-8;
-    for (int jj = 0; jj < in.size(); jj++) {
-    	char c = in[jj];
-        if (T[c] == -1) break;
-        val = (val<<6) + T[c];
-        valb += 6;
-        if (valb>=0) {
-            out.push_back(char((val>>valb)&0xFF));
-            valb-=8;
-        }
-    }
-    return out;
 }
