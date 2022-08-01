@@ -11,7 +11,7 @@
 using namespace std;
 
 int main() {
-    WaterBase db;
+    WaterBase w("db1");
     
     //Save* (var_name, value);
     db.SaveText ( "pushpa dialogue", "jhukega nai sala" );
