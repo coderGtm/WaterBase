@@ -11,7 +11,7 @@
 using namespace std;
 
 int main() {
-    WaterBase w("db1");
+    WaterBase db("db1");
     
     //Save* (var_name, value);
     db.SaveText ( "pushpa dialogue", "jhukega nai sala" );
@@ -23,4 +23,5 @@ int main() {
     cout << db.LoadBoolean ( "cpp is awesome", false ) << endl;
     cout << db.LoadNumber ( "num_var 2", 9 ) << endl;
     cout << db.LoadText( "pushpa dialogue", "hi" ) << endl;
+    system("pause");
 }
