@@ -45,6 +45,7 @@ void WaterBase::write(string valType, string name, string val) {
     vector<string> lines;
     bool wrote = false;
 
+    //to create file if does not exist
     ofstream temp(fname,ios::out | ios::app);
     temp.close();
 
