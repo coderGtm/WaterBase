@@ -1,5 +1,8 @@
 # WaterBase
 
+![WaterBase](WaterBase.jpg)
+
+
 WaterBase is a storage utility created for easy saving and access of persistent key-value data. Boolean, Numeric and String data types can easily be stored and retreived accross multiple app starts in a simple one-liner manner.
 
 # Usage
