@@ -3,7 +3,7 @@
 WaterBase is a storage utility created for easy saving and access of persistent key-value data. Boolean, Numeric and String data types can easily be stored and retreived accross multiple app starts in a simple one-liner manner.
 
 # Usage
-WaterBase currently supports C++ language only. Although work is underway for other languages. _(Feel free to contribute)_
+WaterBase currently supports C++ and Python 3. Although work is underway for other languages. _(Feel free to contribute)_
 ## C++
 Download the `WaterBase.h` header file and include it in your main programme
 ```
@@ -39,4 +39,4 @@ cout << db.LoadNumber ( "num_var 2", 9 ) << endl;
 cout << db.LoadText( "a quote", "Quote not found" ) << endl;
 ```
 
-Refer to [driver.cpp](driver.cpp) for the whole programme.
+Refer to [example.cpp](cpp/example.cpp) for the whole programme.
