@@ -24,7 +24,9 @@ class WaterBase:
             lines.append(valType + self.seperator + str(len(name)) + self.seperator + str(len(val)) + self.seperator + name + self.seperator + val)
 
         with open(self.fname,"w") as newFile:
-            newFile.writelines(s+"\n" for s in lines)
+            for line in lines:
+                if (line!="\n"):
+                    newFile.write(line+"\n")
 
     def read(self,valType,name,defaultVal):
         val = defaultVal
@@ -56,14 +58,3 @@ class WaterBase:
     def LoadText(self,name,defaultVal):
         entry = self.read("S",name,str(defaultVal))
         return entry
-
-
-db = WaterBase("db1")
-
-db.SaveText ( "pushpa dialogue", "jhukega nai sala" )
-db.SaveBoolean ( "cpp is awesome", True )
-db.SaveNumber ( "num_var", 345 )
-
-print(db.LoadBoolean ( "cpp is awesome", False ))
-print(db.LoadNumber ( "num_var", 9 ))
-print(db.LoadText( "pushpa dialogue", "hi" ))
