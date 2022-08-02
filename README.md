@@ -9,9 +9,13 @@ WaterBase currently supports C++ and Python 3. Although work is underway for oth
 
 Download the [waterbase.py](python/waterbase.py) file and place it in your project directory.
 Import the module as follows:
+
 `import waterbase as wb`
+
 Then, create an object of WaterBase in the following manner:
+
 `db = wb.WaterBase("db1")`
+
 where "db1" is the database name.
 If specified name does not exist, a new database will be created.
 
